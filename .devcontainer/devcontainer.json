@@ -1,0 +1,77 @@
+{
+    "name": "Open Car — Workspace",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "24"
+        },
+        "ghcr.io/mrsimonemms/devcontainers/buf:1": {}
+    },
+    // Clones any missing repo on the host before the container is built.
+    "initializeCommand": "bash setup.sh",
+    // One shared contracts working copy: ./contracts is mounted over both
+    // submodule paths, so a schema edit is seen by firmware and app builds at once.
+    "mounts": [
+        {
+            "type": "bind",
+            "source": "${localWorkspaceFolder}/contracts",
+            "target": "${containerWorkspaceFolder}/firmware/contracts"
+        },
+        {
+            "type": "bind",
+            "source": "${localWorkspaceFolder}/contracts",
+            "target": "${containerWorkspaceFolder}/mobile-app/contracts"
+        },
+        // USB access for flashing ESP boards; same as firmware/.devcontainer.
+        {
+            "type": "bind",
+            "source": "/dev",
+            "target": "/dev"
+        }
+    ],
+    "runArgs": [
+        "-p",
+        "4242:4242",
+        "--device-cgroup-rule=c 166:* rmw", // ttyACM: native USB-JTAG serial (C3/C6/S3)
+        "--device-cgroup-rule=c 188:* rmw", // ttyUSB: USB-UART bridges (classic ESP32)
+        "--device-cgroup-rule=c 189:* rmw" // raw USB: probe-rs, espflash over JTAG
+    ],
+    "forwardPorts": [
+        4242
+    ],
+    // VS Code's workspace root is this folder, not firmware/, so `cargo xtask ide`
+    // writes its rust-analyzer settings and debug config here.
+    "containerEnv": {
+        "OPENCAR_VSCODE_DIR": "${containerWorkspaceFolder}/.vscode"
+    },
+    "postCreateCommand": "bash .devcontainer/post-create.sh",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "Dart-Code.dart-code",
+                "Dart-Code.flutter",
+                "streetsidesoftware.code-spell-checker",
+                "vivaxy.vscode-conventional-commits",
+                "dotenv.dotenv-vscode",
+                "EditorConfig.EditorConfig",
+                "chneau.resource-monitor",
+                "FanaticPythoner.better-todo-tree",
+                "mk12.better-git-line-blame",
+                "bufbuild.vscode-buf",
+                "probe-rs.probe-rs-debugger",
+                "ms-vscode.vscode-serial-monitor"
+            ],
+            "settings": {
+                "serialmonitor.defaultPort": "/dev/ttyACM0",
+                "serialmonitor.defaultBaudRate": 115200,
+                // The mounted firmware/contracts and mobile-app/contracts are the
+                // same repo as ./contracts; don't list it three times.
+                "git.detectSubmodules": false
+            }
+        }
+    },
+    "remoteUser": "vscode"
+}

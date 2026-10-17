@@ -1,0 +1,9 @@
+# Project repositories, cloned by setup.sh. Each one is its own git repo.
+/contracts/
+/firmware/
+/mobile-app/
+
+# Per-developer editor config; `cargo xtask ide` writes rust-analyzer settings
+# and the firmware debug config here
+/.vscode/settings.json
+/.vscode/launch.json
