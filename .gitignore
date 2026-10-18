@@ -7,3 +7,6 @@
 # and the firmware debug config here
 /.vscode/settings.json
 /.vscode/launch.json
+
+# Local CAN captures and the analysis scripts kept next to them (large, not shared)
+/CAN logs/
