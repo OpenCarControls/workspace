@@ -30,6 +30,13 @@
             "type": "bind",
             "source": "/dev",
             "target": "/dev"
+        },
+        // Claude Code state (memory, settings, login) lives on the host so it
+        // survives container rebuilds.
+        {
+            "type": "bind",
+            "source": "${localEnv:HOME}/.claude",
+            "target": "/home/vscode/.claude"
         }
     ],
     "runArgs": [
@@ -45,7 +52,9 @@
     // VS Code's workspace root is this folder, not firmware/, so `cargo xtask ide`
     // writes its rust-analyzer settings and debug config here.
     "containerEnv": {
-        "OPENCAR_VSCODE_DIR": "${containerWorkspaceFolder}/.vscode"
+        "OPENCAR_VSCODE_DIR": "${containerWorkspaceFolder}/.vscode",
+        // Keeps Claude's .claude.json inside the mounted dir instead of $HOME.
+        "CLAUDE_CONFIG_DIR": "/home/vscode/.claude"
     },
     "postCreateCommand": "bash .devcontainer/post-create.sh",
     "customizations": {
