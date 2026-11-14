@@ -18,6 +18,8 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
     libusb-1.0-0 libudev-dev pkg-config \
     usbip \
     curl git git-lfs unzip xz-utils zip libglu1-mesa openjdk-21-jdk \
+    # flutter test compiles Thermion's native library for the host.
+    clang libc++-dev libc++abi-dev libgl-dev libegl-dev libgles-dev libdrm-dev libgbm-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
