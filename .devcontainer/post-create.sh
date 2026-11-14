@@ -9,6 +9,3 @@ set -euo pipefail
 cd mobile-app
 flutter config --no-enable-linux-desktop
 flutter pub get
-cd web_3d
-npm install
-npm run build

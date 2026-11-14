@@ -39,7 +39,7 @@ Outside the container the mounts don't exist, so the two submodule paths stay em
 
 *   Rust with every firmware target (PC, Raspberry Pi, ESP32 RISC-V and Xtensa), `protoc`, espflash and probe-rs, plus USB access for flashing.
 *   Flutter (the version in `mobile-app/.flutter-version`), the Android SDK and `protoc-gen-dart` for the app.
-*   `buf` for the contracts, and Node for the app's 3D viewer.
+*   `buf` for the contracts, and Node for the app's model compression script (`tool/compress_model.sh`).
 
 Which firmware board rust-analyzer analyses comes from `firmware/config.toml`. Switch it with `cargo xtask ide` in `firmware/`, or the **Firmware IDE** tasks. Here it writes the rust-analyzer settings and the **Firmware: debug …** config to this folder's `.vscode/`, since that's VS Code's workspace root (see the firmware README).
 
